@@ -160,7 +160,7 @@ def execute_test():
 
 
 def main():
-    execute_test()
+    #execute_test()
     figure.visualize_all_graphs_paper_ready()
 
 if __name__ == "__main__":

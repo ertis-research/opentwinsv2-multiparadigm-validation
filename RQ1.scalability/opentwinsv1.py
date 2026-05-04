@@ -150,6 +150,13 @@ def simulate_device(name, update_interval, test_duration, stop_event):
         t_sent = datetime.now(timezone.utc).isoformat()
         
         payload = generate_ditto_protocol(name, uid)
+        
+        payload_str = json.dumps(payload)
+        size_in_bytes = len(payload_str.encode('utf-8'))
+        # Imprimimos solo si es el 'device0' para no saturar la consola con miles de prints
+        if name == "device0": 
+            print(f"[Info] Message size V1: {size_in_bytes} bytes")
+        
         msg = client.publish(topic, json.dumps(payload), qos=1)
         
         with mid_to_uid_lock:

@@ -3,6 +3,7 @@ import networkx as nx
 import numpy as np
 from rdflib import Graph, Literal
 import os
+import re
 import random
 
 def horizontal_row_layout(G, nodes, spacing=1.0):
@@ -25,16 +26,17 @@ def horizontal_row_layout(G, nodes, spacing=1.0):
     return pos
 
 def get_color(uri):
-        if "Airport" in uri:
-            return "#ff7b7b"
-        elif "Terminal" in uri:
-            return "#ffd46f"
-        elif "Gate" in uri:
-            return "#8DB1D1"
-        elif "Plane" in uri:
-            return "#73ceb3"
-        else:
-            return "#90be6d"
+    # Light, IEEE-friendly, color-blind safe, no black, no pink
+    if "Airport" in uri:
+        return "#D06D6D"  # soft deep red
+    elif "Terminal" in uri:
+        return "#B7D8A9"  # soft green
+    elif "Gate" in uri:
+        return "#F2C97D"  # soft gold
+    elif "Plane" in uri:
+        return "#7DA3C8"  # light blue
+    else:
+        return "#D2C3E8"  # soft lilac for misc
 
     # hierarchical layout for trees
 def hierarchy_pos(G, root=None, width=0.6, vert_gap=0.2, vert_loc=0, xcenter=0.3):
@@ -65,7 +67,7 @@ def visualize_all_graphs_paper_ready():
     5–6: Show ONLY planes (no edges), each once, with flying.value below each node in random layout.
     """
 
-    fig, axes = plt.subplots(2, 3, figsize=(18, 10), facecolor="white")
+    fig, axes = plt.subplots(3, 2, figsize=(10, 14), facecolor="white")
     axes = axes.flatten()
     filenames = [f"output/esc{i}.ttl" for i in range(1, 7)]
 
@@ -144,6 +146,10 @@ def visualize_all_graphs_paper_ready():
                 subj_str = str(subj)
                 if "Plane" in subj_str and subj_str not in G_nx.nodes:
                     G_nx.add_node(subj_str)
+            gate_nodes = [str(n) for n in g.subjects() if "Gate" in str(n)]
+            for gn in gate_nodes:
+                if gn not in G_nx.nodes:
+                    G_nx.add_node(gn)
             core_nodes = [n for n in G_nx.nodes if "Gate" in n]
             subG = G_nx.subgraph(core_nodes)
             pos_core = horizontal_row_layout(subG, core_nodes, spacing=0.1)
@@ -182,7 +188,23 @@ def visualize_all_graphs_paper_ready():
             pos = nx.spring_layout(G_nx, seed=42)
 
         node_colors = [get_color(n) for n in G_nx.nodes]
-        labels_to_draw = {n: node_labels.get(n, n.split(":")[-1]) for n in G_nx.nodes}
+        labels_to_draw = {}
+        for n in G_nx.nodes:
+            base_label = node_labels.get(n, n.split(":")[-1])
+
+            # Insert spaces for clarity (GateA1 -> Gate A1, PlaneC3 -> Plane C3)
+            label = re.sub(r"^(Gate|Plane|Terminal)([A-Z]?[0-9]+)$", r"\1 \2", base_label)
+            
+            label = re.sub(r"^(Gate|Plane)([0-9]+)$", r"\1 \2", label)
+            
+            label = re.sub(r"^(Terminal|Gate|Plane)([A-Z])$", r"\1 \2", label)
+
+            # If label has format Word Code Number -> split into two lines
+            parts = label.split()
+            if len(parts) == 2:
+                label = f"{parts[0]}\n{parts[1]}"
+
+            labels_to_draw[n] = label
 
         # Edge labels
         edge_labels_raw = nx.get_edge_attributes(G_nx, 'label')
@@ -200,7 +222,7 @@ def visualize_all_graphs_paper_ready():
         # Draw
         
         nx.draw_networkx_nodes(G_nx, pos, ax=ax,
-                                node_color=node_colors, linewidths=1.5, node_size=1800, edgecolors="black")
+                                node_color=node_colors, linewidths=1.5, node_size=1800, edgecolors="#666666")
         if i not in [4, 5]:
             nx.draw_networkx_edges(G_nx, pos, ax=ax,
                                     arrows=True, arrowstyle="->",
@@ -209,7 +231,8 @@ def visualize_all_graphs_paper_ready():
                                             font_size=9, label_pos=0.5,
                                             rotate=False, ax=ax, font_weight="bold")
         nx.draw_networkx_labels(G_nx, pos, labels=labels_to_draw,
-                                font_size=7, ax=ax, font_weight='bold')
+                                font_size=10, ax=ax, font_weight='bold'   # fondo blanco para legibilidad
+)
 
         # Inner text (occupied / flying)
         if i not in [4, 5]:
@@ -235,6 +258,9 @@ def visualize_all_graphs_paper_ready():
         ax.set_yticks([])  # Eliminar marcas del eje Y
 
     plt.tight_layout()
+    plt.rcParams['text.usetex'] = False
+    plt.rcParams['font.size'] = 11
+    plt.rcParams['font.family'] = 'sans-serif'
     plt.subplots_adjust(wspace=0.10, hspace=0.10)
     plt.savefig("output/rq2_graphs_paper.pdf", dpi=600,
                 bbox_inches="tight", facecolor="white")
