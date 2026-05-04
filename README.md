@@ -14,7 +14,7 @@
 >
 > This code is **static** and maintained as a snapshot to justify the results presented in the publication. It will not be updated.
 >
-> For the latest, actively developed version of OpenTwins V2, please see the `v2` branch in the primary **[OpenTwins repository](https://github.com/ertis-research/opentwins)**.
+> For the latest, actively developed version of OpenTwins V2, please see the `v2-development` branch in the primary **[OpenTwins repository](https://github.com/ertis-research/opentwins/tree/v2-development)**. 
 
 ---
 
@@ -282,6 +282,8 @@ This is not a bug in the services, but a known behavior of Dapr's default servic
 
 - **Local (Self-Hosted) Mode:** Dapr defaults to mDNS for service discovery. If your local firewall, VPN, or OS configuration (common in VMs or Docker Desktop) interferes with multicast traffic, mDNS resolution can fail or time out, causing extreme delays.
 - **Kubernetes Mode:** In Kubernetes, Dapr correctly uses the cluster's robust K8s DNS service. This is a centralized and highly reliable discovery method, which eliminates the mDNS bottleneck. InvokeMethodAsync calls become fast, with latency limited to standard network/sidecar overhead.
+
+---
 
 ## License
 This project is licensed under the **Apache 2.0 License**. See the LICENSE file for details.
