@@ -24,10 +24,3 @@ spec:
     grpc:
       connectionTimeout: "5s"
       maxRequestBodySize: 4
-  nameResolution:
-    component: "consul"
-    version: "v1"
-    configuration:
-      selfRegister: true
-  mtls:
-    enabled: false

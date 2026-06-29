@@ -10,7 +10,7 @@
 > [!WARNING]
 > **Archived Version for Validation Purposes**
 >
-> This repository contains the preliminary implementation of OpenTwins V2 that was used to conduct the **Research Questions** for validation detailed in our academic paper.
+> This repository contains the preliminary implementation of OpenTwins V2 that was used to validation detailed in our academic paper.
 >
 > This code is **static** and maintained as a snapshot to justify the results presented in the publication. It will not be updated.
 >
@@ -55,6 +55,9 @@ This setup must be deployed manually to your Kubernetes cluster. The following c
 
 ```bash
 # Install Dapr
+helm repo add dapr https://dapr.github.io/helm-charts/
+helm repo update
+
 helm upgrade --install dapr dapr/dapr \
  --version=1.15 \
  --namespace dapr-system \
@@ -154,22 +157,20 @@ kubectl apply -f kubernetes/opentwinsv2-services/events.yaml
 
 Use this option if you have made custom changes to the service code.
 
-1. **Build and Push**: Navigate to the `opentwinsv2-services/src/` directory. From there, build and push the Docker images for each service to your container registry (replace `REGISTRYID` with your registry).
+1. **Build and Push**: Navigate to the `opentwinsv2-services/src/` directory. From there, build and push the Docker images for each service to your container registry.
    ```bash
    # Navigate to the directory
    cd opentwinsv2-services/src/
 
+   # If Minikube: minikube docker-env | Invoke-Expression
    # Events Service
-   docker build -t REGISTRYID/opentwinsv2-events:0.0.1 . -f Dockerfile.Events
-   docker push REGISTRYID/opentwinsv2-events:0.0.1
+   docker build -t opentwinsv2-events:local . -f Dockerfile.Events
     
    # Things Service
-   docker build -t REGISTRYID/opentwinsv2-things:0.0.1 . -f Dockerfile.Things
-   docker push REGISTRYID/opentwinsv2-things:0.0.1
+   docker build -t opentwinsv2-things:local . -f Dockerfile.Things
     
    # Twins Service
-   docker build -t REGISTRYID/opentwinsv2-twins:0.0.1 . -f Dockerfile.Twins
-   docker push REGISTRYID/opentwinsv2-twins:0.0.1
+   docker build -t opentwinsv2-twins:local . -f Dockerfile.Twins
    ```
    
 2. **Update YAMLs**: Modify the `image`: tag in the following files to point to your new images:
@@ -232,14 +233,11 @@ This method is ideal for development and testing.
 
 ## Running the Validation
 
-Each Research Question (RQ) test suite is contained in its own directory at the root of this project.
-
-#### Running the Tests
-To run a specific RQ validation test, navigate to its directory and follow these steps.
+To run validation test, navigate to its directory and follow these steps.
 
 ```bash
-# 1. Navigate to the specific RQ folder
-cd RQ1.scalability/
+# 1. Navigate to the folder
+cd validation/
 
 # 2. Create the environment configuration file
 #    Copy the example file and fill in your specific values 
@@ -264,24 +262,6 @@ pip install -r requirements.txt
 python main.py
 ```
 
-#### Important Considerations for Accurate Latency Measurement
-
-To ensure correct latency measurement, the following points must be taken into account:
-
-**1. Time Synchronization (NTP)**
-   
-To ensure that all measured latencies are accurate, all nodes must have their clocks synchronized. This is especially critical if you are running test clients on a separate machine from the K8s cluster.
-
-We strongly recommend configuring a reliable NTP (Network Time Protocol) client, such as [Meinberg NTP](https://www.meinbergglobal.com/english/sw/ntp.htm#ntp_stable), on all participating machines.
-
-**2. Performance: Local (Self-Hosted) vs. Kubernetes**
-
-You may observe significantly slower performance and timeouts (e.g., 15+ seconds) when running the services locally (in Dapr "self-hosted" mode) compared to Kubernetes deployment.
-
-This is not a bug in the services, but a known behavior of Dapr's default service discovery mechanism.
-
-- **Local (Self-Hosted) Mode:** Dapr defaults to mDNS for service discovery. If your local firewall, VPN, or OS configuration (common in VMs or Docker Desktop) interferes with multicast traffic, mDNS resolution can fail or time out, causing extreme delays.
-- **Kubernetes Mode:** In Kubernetes, Dapr correctly uses the cluster's robust K8s DNS service. This is a centralized and highly reliable discovery method, which eliminates the mDNS bottleneck. InvokeMethodAsync calls become fast, with latency limited to standard network/sidecar overhead.
 
 ---
 

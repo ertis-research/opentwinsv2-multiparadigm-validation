@@ -1,0 +1,16 @@
+{
+  "@context": "https://www.w3.org/2022/wot/td/v1.1",
+  "id": "urn:test:airport-telemetry",
+  "title": "Airport Physical Telemetry",
+  "description": "Resource Thing: Emulates IoT sensors for gates and airplanes.",
+  "events": {
+    "telemetryUpdated": {
+      "description": "Fired when gate or plane states are updated.",
+      "forms": [{
+        "href": "mqtt://localhost:1883/airport/telemetry/#",
+        "op": "subscribeevent",
+        "contentType": "application/json"
+      }]
+    }
+  }
+}

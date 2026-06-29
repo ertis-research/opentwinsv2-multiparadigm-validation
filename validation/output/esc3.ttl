@@ -1,0 +1,72 @@
+@prefix ns1: <http://example.org/> .
+@prefix ns2: <http://example.org/otv2:> .
+
+<urn:test:airport-telemetry> ns1:createdAt "2026-06-29T21:18:15.0567274Z" ;
+    ns1:name "Airport Physical Telemetry" .
+
+<urn:test:Airport1> ns1:createdAt "2026-06-29T21:18:14.8214785Z" ;
+    ns1:name "Airport" ;
+    ns2:hasChild <urn:test:TerminalA>,
+        <urn:test:TerminalB> ;
+    ns2:hasMLModel <urn:test:airport-ml-predictor> .
+
+<urn:test:GateB2> ns1:createdAt "2026-06-29T21:18:14.7570791Z" ;
+    ns1:name "GateB2" .
+
+<urn:test:Plane4> ns1:createdAt "2026-06-29T21:18:14.9358642Z" ;
+    ns1:name "Plane4" ;
+    ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
+
+<urn:test:Plane5> ns1:createdAt "2026-06-29T21:18:14.9737579Z" ;
+    ns1:name "Plane5" ;
+    ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
+
+<urn:test:TerminalA> ns1:createdAt "2026-06-29T21:18:14.7750549Z" ;
+    ns1:name "TerminalA" ;
+    ns2:hasChild <urn:test:GateA1>,
+        <urn:test:GateA2> .
+
+<urn:test:TerminalB> ns1:createdAt "2026-06-29T21:18:14.7994754Z" ;
+    ns1:name "TerminalB" ;
+    ns2:hasChild <urn:test:GateB1>,
+        <urn:test:GateB2> .
+
+<urn:test:airport-ml-predictor> ns1:createdAt "2026-06-29T21:18:14.8217811Z" ;
+    ns1:name "urn:test:airport-ml-predictor" ;
+    ns2:hasMLModel <urn:test:Airport1> .
+
+<urn:test:GateA1> ns1:createdAt "2026-06-29T21:18:14.6885729Z" ;
+    ns1:location <urn:test:Plane1> ;
+    ns1:name "GateA1" .
+
+<urn:test:GateA2> ns1:createdAt "2026-06-29T21:18:14.7125291Z" ;
+    ns1:location <urn:test:Plane2> ;
+    ns1:name "GateA2" .
+
+<urn:test:GateB1> ns1:createdAt "2026-06-29T21:18:14.7354538Z" ;
+    ns1:location <urn:test:Plane3> ;
+    ns1:name "GateB1" .
+
+<urn:test:Plane1> ns1:createdAt "2026-06-29T21:18:14.853619Z" ;
+    ns1:location <urn:test:GateA1> ;
+    ns1:name "Plane1" ;
+    ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
+
+<urn:test:Plane2> ns1:createdAt "2026-06-29T21:18:14.8787108Z" ;
+    ns1:location <urn:test:GateA2> ;
+    ns1:name "Plane2" ;
+    ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
+
+<urn:test:Plane3> ns1:createdAt "2026-06-29T21:18:14.9027038Z" ;
+    ns1:location <urn:test:GateB1> ;
+    ns1:name "Plane3" ;
+    ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
+
+<urn:test:airport-fmi-fuel> ns1:createdAt "2026-06-29T21:18:14.8536777Z" ;
+    ns1:name "urn:test:airport-fmi-fuel" ;
+    ns2:hasFMISimulation <urn:test:Plane1>,
+        <urn:test:Plane2>,
+        <urn:test:Plane3>,
+        <urn:test:Plane4>,
+        <urn:test:Plane5> .
+

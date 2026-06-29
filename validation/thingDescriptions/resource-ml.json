@@ -1,0 +1,27 @@
+{
+  "@context": "https://www.w3.org/2022/wot/td/v1.1",
+  "id": "urn:test:airport-ml-predictor",
+  "title": "ML Flight Delay Predictor",
+  "description": "Resource Thing: ML model predicting the probability of imminent gate release.",
+  "events": {
+    "delayProbabilityUpdated": {
+      "description": "Fired when the ML model generates a new prediction for cascading delays.",
+      "data": {
+        "type": "object",
+        "properties": {
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "unit": "percent"
+          }
+        }
+      },
+      "forms": [{
+        "href": "mqtt://localhost:1883/airport/ml/delay",
+        "op": "subscribeevent",
+        "contentType": "application/json"
+      }]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "@context": "https://www.w3.org/2022/wot/td/v1.1",
+  "id": "urn:test:airport-fmi-fuel",
+  "title": "FMI Aircraft Fuel Simulator",
+  "description": "Resource Thing: FMI physical model calculating remaining flight time based on hold patterns.",
+  "events": {
+    "fuelStatusUpdated": {
+      "description": "Fired when the FMI model recalculates the remaining flight time of aircrafts in hold.",
+      "data": {
+        "type": "object",
+        "properties": {
+          "remainingMinutes": {
+            "type": "number",
+            "minimum": 0,
+            "unit": "minutes"
+          }
+        }
+      },
+      "forms": [{
+        "href": "mqtt://localhost:1883/airport/fmi/fuel",
+        "op": "subscribeevent",
+        "contentType": "application/json"
+      }]
+    }
+  }
+}

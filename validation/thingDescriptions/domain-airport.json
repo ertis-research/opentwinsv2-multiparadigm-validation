@@ -1,0 +1,54 @@
+{
+    "@context": "https://www.w3.org/2019/wot/td/v1",
+    "id": "urn:test:Airport1",
+    "title": "Airport",
+    "properties": {
+        "collapsed": {
+            "type": "boolean",
+            "description": "Operational state of the airport"
+        }
+    },
+    "links": [
+        {
+            "href": "urn:test:TerminalA",
+            "rel": "otv2:hasChild",
+            "type": "application/td+json"
+        },
+        {
+            "href": "urn:test:TerminalB",
+            "rel": "otv2:hasChild",
+            "type": "application/td+json"
+        },
+        {
+            "href": "urn:test:airport-ml-predictor",
+            "rel": "otv2:hasMLModel",
+            "type": "application/td+json"
+        }
+    ],
+    "otv2:subscribedEvents": [
+        {
+            "otv2:event": "mqtt:changes_ml"
+        }
+    ],
+    "otv2:rules": {
+        "update": {
+            "otv2:if": {
+                "==": [
+                    {
+                        "var": "eventName"
+                    },
+                    "mqtt:changes_ml"
+                ]
+            },
+            "otv2:then": {
+                "otv2:updateState": {
+                    "collapsed": {
+                        "value": {
+                            "var": "payload.collapsed"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

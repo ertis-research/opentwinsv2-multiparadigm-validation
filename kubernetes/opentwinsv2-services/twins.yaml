@@ -21,8 +21,8 @@ spec:
     spec:
       containers:
         - name: twins-service
-          image: registry.ertis.uma.es/opentwinsv2-twins:0.0.1 
-          imagePullPolicy: Always
+          image: opentwinsv2-twins:local
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
           env:

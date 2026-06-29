@@ -7,7 +7,7 @@ global:
 controller:
   persistence: 
     enabled: false
-  replicaCount: 3
+  replicaCount: 1
 broker:
   persistence:
     enabled: false
@@ -27,5 +27,3 @@ externalAccess:
       type: NodePort
       nodePorts: 
         - 32001
-        - 32002
-        - 32003

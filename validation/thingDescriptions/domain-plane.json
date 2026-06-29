@@ -1,0 +1,55 @@
+{
+    "@context": "https://www.w3.org/2019/wot/td/v1",
+    "id": "urn:test:Plane",
+    "title": "Plane",
+    "properties": {
+        "flying": {
+            "type": "boolean",
+            "description": "Current status of the plane"
+        }
+    },
+    "actions": {
+        "dock": {
+            "description": "Dock the plane at a specified gate",
+            "input": {
+                "type": "string"
+            }
+        },
+        "depart": {
+            "description": "Depart the plane from the current gate"
+        }
+    },
+    "links": [
+        {
+            "href": "urn:test:airport-fmi-fuel",
+            "rel": "otv2:hasFMISimulation",
+            "type": "application/td+json"
+        }
+    ],
+    "otv2:subscribedEvents": [
+        {
+            "otv2:event": "mqtt:changes_fmi"
+        }
+    ],
+    "otv2:rules": {
+        "update": {
+            "otv2:if": {
+                "==": [
+                    {
+                        "var": "eventName"
+                    },
+                    "mqtt:changes_fmi"
+                ]
+            },
+            "otv2:then": {
+                "otv2:updateState": {
+                    "flying": {
+                        "value": {
+                            "var": "payload.flying"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -21,8 +21,8 @@ spec:
     spec:
       containers:
         - name: opentwinsv2-events
-          image: registry.ertis.uma.es/opentwinsv2-events:0.0.1 
-          imagePullPolicy: Always
+          image: opentwinsv2-events:local
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
           env:
@@ -36,8 +36,11 @@ kind: Service
 metadata:
   name: opentwinsv2-events-svc
 spec:
+  type: NodePort
   selector:
     app: opentwinsv2-events
   ports:
-    - port: 80
-      targetPort: 8080
+    - name: http
+      port: 80  
+      targetPort: 8080  
+      nodePort: 30355 
