@@ -2,95 +2,95 @@
 @prefix ns2: <http://example.org/otv2:> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:test:Airport1> ns1:collapsed.lastUpdate "2026-06-30T17:15:50.5588588Z" ;
+<urn:test:Airport1> ns1:collapsed.lastUpdate "2026-06-30T17:26:18.7374659Z" ;
     ns1:collapsed.value false ;
-    ns1:createdAt "2026-06-30T17:14:23.9104841Z" ;
+    ns1:createdAt "2026-06-30T17:24:48.8346941Z" ;
     ns1:name "Airport" ;
     ns2:hasChild <urn:test:TerminalA>,
         <urn:test:TerminalB> ;
     ns2:hasMLModel <urn:test:airport-ml-predictor> .
 
-<urn:test:Plane1> ns1:createdAt "2026-06-30T17:14:23.93547Z" ;
-    ns1:flying.lastUpdate "2026-06-30T17:15:50.5642404Z" ;
+<urn:test:Plane1> ns1:createdAt "2026-06-30T17:24:48.8590863Z" ;
+    ns1:flying.lastUpdate "2026-06-30T17:26:18.7537121Z" ;
     ns1:flying.value 13 ;
     ns1:name "Plane1" ;
     ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
 
-<urn:test:Plane4> ns1:createdAt "2026-06-30T17:14:24.028552Z" ;
-    ns1:flying.lastUpdate "2026-06-30T17:15:50.6174567Z" ;
+<urn:test:Plane4> ns1:createdAt "2026-06-30T17:24:48.9320376Z" ;
+    ns1:flying.lastUpdate "2026-06-30T17:26:18.7570255Z" ;
     ns1:flying.value 43 ;
     ns1:name "Plane4" ;
     ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
 
-<urn:test:Plane5> ns1:createdAt "2026-06-30T17:14:24.0524567Z" ;
-    ns1:flying.lastUpdate "2026-06-30T17:15:50.6174815Z" ;
+<urn:test:Plane5> ns1:createdAt "2026-06-30T17:24:48.9580341Z" ;
+    ns1:flying.lastUpdate "2026-06-30T17:26:18.7574681Z" ;
     ns1:flying.value 58 ;
     ns1:name "Plane5" ;
     ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
 
-<urn:test:TerminalA> ns1:createdAt "2026-06-30T17:14:23.8560714Z" ;
+<urn:test:TerminalA> ns1:createdAt "2026-06-30T17:24:48.7879668Z" ;
     ns1:name "TerminalA" ;
     ns2:hasChild <urn:test:GateA1>,
         <urn:test:GateA2> .
 
-<urn:test:TerminalB> ns1:createdAt "2026-06-30T17:14:23.8815908Z" ;
+<urn:test:TerminalB> ns1:createdAt "2026-06-30T17:24:48.8109174Z" ;
     ns1:name "TerminalB" ;
     ns2:hasChild <urn:test:GateB1>,
         <urn:test:GateB2> .
 
-<urn:test:airport-ml-predictor> ns1:createdAt "2026-06-30T17:14:23.6946305Z" ;
+<urn:test:airport-ml-predictor> ns1:createdAt "2026-06-30T17:24:48.652319Z" ;
     ns1:name "ML Flight Delay Predictor" ;
     ns2:hasMLModel <urn:test:Airport1> .
 
-<urn:test:GateA1> ns1:createdAt "2026-06-30T17:14:23.764114Z" ;
+<urn:test:GateA1> ns1:createdAt "2026-06-30T17:24:48.6935542Z" ;
     ns1:name "GateA1" ;
-    ns1:occupied.lastUpdate "2026-06-30T17:15:50.5641421Z" ;
+    ns1:occupied.lastUpdate "2026-06-30T17:26:18.751698Z" ;
     ns1:occupied.value true ;
     ns2:hasTelemetry <urn:test:airport-telemetry> .
 
-<urn:test:GateB2> ns1:createdAt "2026-06-30T17:14:23.8333017Z" ;
+<urn:test:GateB2> ns1:createdAt "2026-06-30T17:24:48.7633655Z" ;
     ns1:name "GateB2" ;
-    ns1:occupied.lastUpdate "2026-06-30T17:15:50.5639404Z" ;
+    ns1:occupied.lastUpdate "2026-06-30T17:26:18.7538137Z" ;
     ns1:occupied.value true ;
     ns2:hasTelemetry <urn:test:airport-telemetry> .
 
-<urn:test:Plane2> ns1:createdAt "2026-06-30T17:14:23.9786981Z" ;
-    ns1:flying.lastUpdate "2026-06-30T17:15:50.6150581Z" ;
+<urn:test:Plane2> ns1:createdAt "2026-06-30T17:24:48.8840819Z" ;
+    ns1:flying.lastUpdate "2026-06-30T17:26:18.7569413Z" ;
     ns1:flying.value 20 ;
     ns1:name "Plane2" ;
     ns2:assignedTo <urn:test:GateA2> ;
     ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
 
-<urn:test:Plane3> ns1:createdAt "2026-06-30T17:14:24.0031671Z" ;
-    ns1:flying.lastUpdate "2026-06-30T17:15:50.6174185Z" ;
+<urn:test:Plane3> ns1:createdAt "2026-06-30T17:24:48.9071806Z" ;
+    ns1:flying.lastUpdate "2026-06-30T17:26:18.7570053Z" ;
     ns1:flying.value 28 ;
     ns1:name "Plane3" ;
     ns2:assignedTo <urn:test:GateB1> ;
     ns2:hasFMISimulation <urn:test:airport-fmi-fuel> .
 
-<urn:test:GateA2> ns1:createdAt "2026-06-30T17:14:23.7886143Z" ;
+<urn:test:GateA2> ns1:createdAt "2026-06-30T17:24:48.716223Z" ;
     ns1:name "GateA2" ;
-    ns1:occupied.lastUpdate "2026-06-30T17:15:50.5643662Z" ;
+    ns1:occupied.lastUpdate "2026-06-30T17:26:18.7538933Z" ;
     ns1:occupied.value true ;
     ns2:assignedTo <urn:test:Plane2> ;
     ns2:hasTelemetry <urn:test:airport-telemetry> .
 
-<urn:test:GateB1> ns1:createdAt "2026-06-30T17:14:23.8109047Z" ;
+<urn:test:GateB1> ns1:createdAt "2026-06-30T17:24:48.7400844Z" ;
     ns1:name "GateB1" ;
-    ns1:occupied.lastUpdate "2026-06-30T17:15:50.5643065Z" ;
+    ns1:occupied.lastUpdate "2026-06-30T17:26:18.7569224Z" ;
     ns1:occupied.value true ;
     ns2:assignedTo <urn:test:Plane3> ;
     ns2:hasTelemetry <urn:test:airport-telemetry> .
 
-<urn:test:airport-telemetry> ns1:createdAt "2026-06-30T17:14:23.7394973Z" ;
+<urn:test:airport-telemetry> ns1:createdAt "2026-06-30T17:24:48.6707756Z" ;
     ns1:name "Airport Physical Telemetry" ;
     ns2:hasTelemetry <urn:test:GateA1>,
         <urn:test:GateA2>,
         <urn:test:GateB1>,
         <urn:test:GateB2> .
 
-<urn:test:airport-fmi-fuel> ns1:createdAt "2026-06-30T17:14:23.6702791Z" ;
-    ns1:name "FMI Aircraft Fuel Simulator" ;
+<urn:test:airport-fmi-fuel> ns1:createdAt "2026-06-30T17:24:48.6330267Z" ;
+    ns1:name "FMI Aircraft Simulator" ;
     ns2:hasFMISimulation <urn:test:Plane1>,
         <urn:test:Plane2>,
         <urn:test:Plane3>,

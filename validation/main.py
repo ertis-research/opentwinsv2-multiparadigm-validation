@@ -4,6 +4,7 @@
 RQ - Digital Twin Multiparadigm Orchestrator
 """
 
+from datetime import datetime
 import os
 import sys
 import time
@@ -20,12 +21,26 @@ import querys
 
 load_dotenv()
 
+class Logger:
+    def __init__(self, filepath):
+        self.terminal = sys.stdout
+        self.log = open(filepath, "a", encoding="utf-8")
+
+    def write(self, message):
+        self.terminal.write(message)  # Imprime en la consola
+        self.log.write(message)       # Guarda en el archivo
+        self.log.flush()              # Fuerza el guardado inmediato
+
+    def flush(self):
+        self.terminal.flush()
+
 # ============================================
 # Environment Variables & Configuration
 # ============================================
 TWINS_ENDPOINT = os.getenv("OTV2_TWINS_URL")
 TWIN_ID = os.getenv("OTV2_TWIN_ID")
 RDF_FORMAT = "nquads"
+LOG_FILE = "output/execution_traces.log"
 WAIT_TIME_SECONDS = 7 # Slightly increased to give simulators time to spin up and publish
 
 # ============================================
@@ -139,6 +154,8 @@ def run_scenario(scenario_id: int, description: str, expected_scenario: str):
 # ============================================
 
 def execute_test():
+    sys.stdout = Logger(LOG_FILE)
+    print(f"\n\n>>> RUN DATETIME: {datetime.now()} <<<")
     print("Initializing base configuration for the DT environment...")
     init.prepare_base() 
 
@@ -184,8 +201,8 @@ def execute_test():
 
 def main():
     try:
-        execute_test()
-        # Assuming figure module generates the visuals from the /output directory
+        #execute_test()
+        # Figure module generates the visuals from the /output directory
         figure.visualize_all_graphs_paper_ready()
     except KeyboardInterrupt:
         print("\n[INFO] Orchestration aborted by user.")

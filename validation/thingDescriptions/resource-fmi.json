@@ -1,7 +1,7 @@
 {
   "@context": "https://www.w3.org/2022/wot/td/v1.1",
   "id": "urn:test:airport-fmi-fuel",
-  "title": "FMI Aircraft Fuel Simulator",
+  "title": "FMI Aircraft Simulator",
   "description": "Resource Thing: FMI physical model calculating remaining flight time based on hold patterns.",
   "events": {
     "fuelStatusUpdated": {
