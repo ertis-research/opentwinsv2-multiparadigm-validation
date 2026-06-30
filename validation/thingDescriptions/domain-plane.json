@@ -4,8 +4,8 @@
     "title": "Plane",
     "properties": {
         "flying": {
-            "type": "boolean",
-            "description": "Current status of the plane"
+            "type": "number",
+            "description": "Time in minutes until the plane lands"
         }
     },
     "actions": {

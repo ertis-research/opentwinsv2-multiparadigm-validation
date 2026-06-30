@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: benthos-mqtt-kafka
+  name: otv2-mpm-benthos-mqtt-kafka
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: benthos-mqtt-kafka
+      app: otv2-mpm-benthos-mqtt-kafka
   template:
     metadata:
       labels:
-        app: benthos-mqtt-kafka
+        app: otv2-mpm-benthos-mqtt-kafka
     spec:
       containers:
         - name: benthos-mqtt-kafka

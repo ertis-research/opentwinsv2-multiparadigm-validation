@@ -3,7 +3,7 @@
 zero:
   service:
     type: NodePort
-    nodePort: 32008
+    nodePort: 32018
 
 alpha:
   acl:
@@ -16,7 +16,7 @@ alpha:
         whitelist: 10.0.0.0/8,172.0.0.0/8,192.168.0.0/16
   service:
     type: NodePort
-    nodePort: 32009
+    nodePort: 32019
   persistentVolume:
     enabled: true
 
@@ -24,4 +24,4 @@ ratel:
   enabled: true
   service:
     type: NodePort
-    nodePort: 32010
+    nodePort: 32011

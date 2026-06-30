@@ -503,3 +503,4 @@ $RECYCLE.BIN/
 *.swp
 
 opentwinsv2-services/src/Twins/daprConfig.yaml
+kubernetes/benthos-mqtt-kafka/benthos-config-basic-fog.yaml

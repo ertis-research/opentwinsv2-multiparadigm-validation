@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: opentwinsv2-timescaledb
+  name: otv2-mpm-timescaledb
 spec:
-  serviceName: opentwinsv2-timescaledb
+  serviceName: otv2-mpm-timescaledb
   replicas: 1
   selector:
     matchLabels:
-      app: opentwinsv2-timescaledb
+      app: otv2-mpm-timescaledb
   template:
     metadata:
       labels:
-        app: opentwinsv2-timescaledb
+        app: otv2-mpm-timescaledb
     spec:
       containers:
-        - name: opentwinsv2-timescaledb
+        - name: otv2-mpm-timescaledb
           image: 'timescale/timescaledb:latest-pg17'
           env:
             - name: POSTGRES_USER
@@ -33,7 +33,7 @@ spec:
       volumes:
         - name: timescale-storage
           persistentVolumeClaim:
-            claimName: opentwinsv2-timescale-pvc
+            claimName: otv2-mpm-pvc
 
 ---
 
@@ -41,13 +41,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: opentwinsv2-timescaledb
+  name: otv2-mpm-timescaledb
 spec:
   selector:
-    app: opentwinsv2-timescaledb
+    app: otv2-mpm-timescaledb
   ports:
     - protocol: TCP
       port: 5432
       targetPort: 5432
-      nodePort: 31523
+      nodePort: 31223
   type: NodePort

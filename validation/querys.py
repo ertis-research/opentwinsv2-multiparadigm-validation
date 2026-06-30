@@ -1,94 +1,119 @@
 from rdflib import Graph
-import datetime
 
-TRACE_FILE = "output/proof_trace.log"
-
-def log_trace(message):
-    """Append trace messages to file and print to console."""
-    timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-    with open(TRACE_FILE, "a") as f:
-        f.write(f"[{timestamp}] {message}\n")
-    print(f"[TRACE] {message}")
-
-def check(g: Graph, query: str, rule_name: str, rule_description: str):
-    """Run ASK query, evaluate result, and log inference trace."""
-    log_trace(f"Applying rule: {rule_name} - {rule_description}")
-    log_trace("Running SPARQL query...")
-    res = g.query(query)
-
-    if bool(res):
-        result = "NOT COLLAPSED"
-        log_trace("Condition satisfied: Exists element not meeting collapse criteria.")
-    else:
-        result = "COLLAPSED"
-        log_trace("Condition not satisfied: Collapse criteria met.")
-
-    print(f"Result: {result}")
-    log_trace(f"Inference conclusion: {result}\n")
-    return result
-
-
-def check_hierarchy(g: Graph):
-    query = """
-    PREFIX ns1: <http://example.org/otv2:>
-    PREFIX ns2: <http://example.org/>
-
-    ASK {
-        VALUES ?airport { <urn:test:rq2:Airport1> }
-
-        ?airport ns1:hasChild+ ?gate .
-        ?gate ns2:name ?gateName .
-
-        FILTER EXISTS {
-            ?gate ns2:occupied.value ?status .
-            FILTER(?status = false)
-        }
-    }
+def verify_isolated_scenario(g: Graph, expected_scenario: str):
     """
-    check(
-        g,
-        query,
-        rule_name="R1 - Hierarchical collapse rule",
-        rule_description="IF all gates of the airport are occupied THEN airport collapsed",
-    )
-
-
-def check_associative(g: Graph):
-    query = """
+    Evaluates the airport graph against 4 distinct collapse scenarios.
+    Ensures that ONLY the expected scenario is triggered (Strict Isolation).
+    expected_scenario options: "baseline", "associative", "physical", "aerial", "prediction"
+    """
+    
+    # Define prefixes for all queries
+    prefixes = """
     PREFIX ns1: <http://example.org/>
     PREFIX ns2: <http://example.org/otv2:>
-
-    ASK {
-        ?gate ns1:name ?name .
-        FILTER regex(str(?gate), "Gate", "i")
-        FILTER NOT EXISTS { ?plane ns1:location ?gate }
-    }
     """
-    check(
-        g,
-        query,
-        rule_name="R2 - Associative collapse rule",
-        rule_description="IF all gates have planes assigned THEN airport collapsed",
-    )
     
-    
-def check_p2p(g: Graph):
-    query = """
-    PREFIX ns1: <http://example.org/>
+    # Dictionary containing the 4 separate ASK queries
+    queries = {
+        "prediction": prefixes + """
+            ASK { ?airport ns1:collapsed.value true . }
+        """,
+        
+        "aerial": prefixes + """
+            ASK {
+                {
+                    SELECT ?flyingTime (COUNT(?plane) AS ?planeCount)
+                    WHERE { ?plane ns1:flying.value ?flyingTime . } 
+                    GROUP BY ?flyingTime
+                }
+                FILTER(?planeCount >= 5)
+            }
+        """,
+        
+        "physical": prefixes + """
+            ASK {
+                {
+                    SELECT (COUNT(?gate) AS ?total)
+                    WHERE {
+                        ?airport ns2:hasChild ?terminal .
+                        ?terminal ns2:hasChild ?gate .
+                    }
+                }
+                {
+                    SELECT (COUNT(?occGate) AS ?occupied)
+                    WHERE {
+                        ?airport ns2:hasChild ?terminal .
+                        ?terminal ns2:hasChild ?occGate .
+                        ?occGate ns1:occupied.value true .
+                    }
+                }
+                FILTER(?total > 0 && ?total = ?occupied)
+            }
+        """,
+        
+        "associative": prefixes + """
+            ASK {
+                {
+                    SELECT (COUNT(DISTINCT ?gate) AS ?assignedCount)
+                    WHERE { ?plane ns2:assignedTo ?gate . }
+                }
+                FILTER(?assignedCount >= 8)
+            }
+        """
+    }
 
-    ASK {
-    {
-        SELECT (COUNT(DISTINCT ?plane) AS ?planesFlying)
-        WHERE {
-            ?plane ns1:flying.value true .
-        }
-    }
-    FILTER(?planesFlying >= 2)
-    }
-    """
-    check(
-        g,
-        query,
-        rule_name="R3 - Peer-to-peer collapse rule",
-        rule_description="IF fewer than 2 planes are flying THEN airport collapsed",
-    )
+    # Execute all queries and store results
+    results = {}
+    for scenario_name, query_str in queries.items():
+        results[scenario_name] = bool(list(g.query(query_str))[0])
+        
+    # Print the Header
+    print("======================================================")
+    print(f" TEST EXECUTION: Expected -> {expected_scenario.upper()}")
+    print("======================================================")
+    
+    # Table Header
+    print(f"| {'SCENARIO':<12} | {'OBTAINED':<10} | {'EXPECTED':<10} | {'PASS?':<5} |")
+    print("|--------------|------------|------------|-------|")
+    
+    all_tests_passed = True
+    active_scenarios = []
+
+    # Print Table Rows and check strict isolation
+    for scenario_name, obtained_result in results.items():
+        # Determine what the result SHOULD be for this specific row
+        expected_result = True if scenario_name == expected_scenario else False
+        
+        # Check if row passes
+        row_passed = (obtained_result == expected_result)
+        if not row_passed:
+            all_tests_passed = False
+            
+        if obtained_result:
+            active_scenarios.append(scenario_name)
+            
+        # Formatting the row strings
+        obtained_str = "TRUE" if obtained_result else "FALSE"
+        expected_str = "TRUE" if expected_result else "FALSE"
+        pass_str = "YES" if row_passed else "NO"
+        
+        print(f"| {scenario_name.capitalize():<12} | {obtained_str:<10} | {expected_str:<10} | {pass_str:<5} |")
+
+    # Print Footer and Final Verdict
+    print("------------------------------------------------------")
+    if len(active_scenarios) == 0:
+        detected_str = "None (Baseline)"
+    else:
+        detected_str = ", ".join(active_scenarios)
+        
+    print(f"Detected as active : {detected_str}")
+    
+    # Final Validation
+    if all_tests_passed:
+        print("VERDICT            : SUCCESS")
+    else:
+        print("VERDICT            : FAILED")
+        
+    print("======================================================\n")
+    
+    return all_tests_passed

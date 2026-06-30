@@ -7,7 +7,7 @@ master:
   service:
     type: NodePort
     nodePorts:
-      redis: "31342"
+      redis: "31242"
   resources:
     limits: 
       memory: "1Gi"

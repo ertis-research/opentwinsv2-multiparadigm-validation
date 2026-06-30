@@ -1,6 +1,6 @@
 input:
   mqtt:
-    urls: [tcp://mosquitto.opentwinsv2.svc.cluster.local:1883]
+    urls: [tcp://otv2-mpm-mosquitto.opentwinsv2-test2.svc.cluster.local:1883]
     topics: [telemetry/#]
     client_id: benthos-mqtt-client-edge
 
@@ -22,9 +22,7 @@ pipeline:
 output:
   kafka:
     addresses:
-      - kafka-controller-0.kafka-controller-headless.opentwinsv2.svc.cluster.local:9092
-      - kafka-controller-1.kafka-controller-headless.opentwinsv2.svc.cluster.local:9092
-      - kafka-controller-2.kafka-controller-headless.opentwinsv2.svc.cluster.local:9092
+      - otv2-mpm-kafka-controller-0.otv2-mpm-kafka-controller-headless.opentwinsv2-test2.svc.cluster.local:9092
     topic: opentwinsv2.events
     client_id: benthos-kafka-producer
     max_in_flight: 64

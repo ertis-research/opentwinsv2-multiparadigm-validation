@@ -19,7 +19,7 @@
     "links": [
         {
             "href": "urn:test:airport-telemetry",
-            "rel": "hasTelemetry",
+            "rel": "otv2:hasTelemetry",
             "type": "application/td+json"
         }
     ],

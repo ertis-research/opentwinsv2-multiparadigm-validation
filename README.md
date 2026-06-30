@@ -74,10 +74,10 @@ helm upgrade --install dapr-dashboard dapr/dapr-dashboard --namespace dapr-syste
 
 ```bash
 # Add the DGraph Helm repo
-helm repo add dgraph [https://charts.dgraph.io](https://charts.dgraph.io)
+helm repo add dgraph https://charts.dgraph.io
 
 # Install DGraph using the provided configuration
-helm install opentwinsv2-dgraph dgraph/dgraph -f kubernetes/dgraph/values.yaml
+helm install otv2-mpm-dgraph dgraph/dgraph -f kubernetes/dgraph/values.yaml
 ```
 
 #### 3. Kafka (Message Broker)
@@ -87,17 +87,17 @@ helm install opentwinsv2-dgraph dgraph/dgraph -f kubernetes/dgraph/values.yaml
 export CLUSTER_IP="YOUR_CLUSTER_IP"
 
 # Install Kafka
-helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka -f kubernetes/kafka/values.yaml \
+helm install otv2-mpm-kafka oci://registry-1.docker.io/bitnamicharts/kafka -f kubernetes/kafka/values.yaml \
   --set externalAccess.controller.service.domain="$CLUSTER_IP"
 
 # Install Kafka UI
-helm install kafka-ui kafka-ui/kafka-ui -f kubernetes/kafka/values-ui.yaml
+helm install otv2-mpm-kafka-ui kafka-ui/kafka-ui -f kubernetes/kafka/values-ui.yaml
 ```
 
 #### 4. Redis (Cache)
 
 ```bash
-helm install opentwinsv2-redis oci://registry-1.docker.io/bitnamicharts/redis -f kubernetes/redis/values.yaml
+helm install otv2-mpm-redis oci://registry-1.docker.io/bitnamicharts/redis -f kubernetes/redis/values.yaml
 ```
 
 #### 5. TimescaleDB (Database)

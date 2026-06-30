@@ -3,7 +3,7 @@ yamlApplicationConfig:
     clusters:
       - name: OpenTwinsKafka
         bootstrapServers: >
-          kafka.opentwinsv2.svc.cluster.local:9092
+          otv2-mpm-kafka.opentwinsv2-test2.svc.cluster.local:9092
   auth:
     type: disabled
   management:
