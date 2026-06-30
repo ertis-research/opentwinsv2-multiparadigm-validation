@@ -57,16 +57,17 @@ def get_color(node_id, node_kind):
 
 
 def pretty_label(raw_label, props=None):
-    """Inserta saltos de línea e incluye las propiedades físicas."""
+    """Inserta saltos de línea solo para Terminal, e incluye las propiedades."""
     label = re.sub(r"^(Gate|Plane|Terminal)([A-Z]?[0-9]+)$", r"\1 \2", raw_label)
     label = re.sub(r"^(Gate|Plane)([0-9]+)$", r"\1 \2", label)
     label = re.sub(r"^(Terminal|Gate|Plane)([A-Z])$", r"\1 \2", label)
     parts = label.split()
     
-    if len(parts) == 2:
+    # Solo aplicamos el salto de línea si es Terminal
+    if len(parts) == 2 and parts[0] == "Terminal":
         final_label = f"{parts[0]}\n{parts[1]}"
     else:
-        final_label = label
+        final_label = label  # Gate y Plane mantienen el espacio en lugar del \n
         
     if props:
         props_str = ", ".join([f"{k}: {v}" for k, v in props.items()])
@@ -212,11 +213,10 @@ def draw_scenario(ax, fname, idx):
     ax.set_facecolor("white")
 
     if not os.path.exists(fname):
-        ax.text(0.5, 0.5, "No data", ha="center", va="center")
+        ax.text(0.5, 0.5, "No data", ha="center", va="center", fontsize=14)
         ax.set_xticks([])
         ax.set_yticks([])
-        # Ajuste de margen mínimo para casos "No data"
-        ax.set_title(f"Scenario {idx + 1}", fontsize=15, pad=18, fontweight="bold")
+        ax.set_title(f"Scenario {idx + 1}", fontsize=18, pad=18, fontweight="bold")
         return
 
     nodes, hierarchy_edges, resource_edges, assigned_edges = load_ttl(fname)
@@ -264,10 +264,11 @@ def draw_scenario(ax, fname, idx):
                            alpha=1.0, edge_color="#FF5500", style="solid",
                            connectionstyle="arc3,rad=-0.15")
 
+    # ----- Aumento de tamaño de fuente en las etiquetas de los nodos -----
     nx.draw_networkx_labels(G_draw, pos, labels={n: l for n, l in labels.items() if nodes[n]["kind"] == "domain"},
-                            ax=ax, font_size=8.5, font_weight="bold")
+                            ax=ax, font_size=14, font_weight="bold")
     nx.draw_networkx_labels(G_draw, pos, labels={n: l for n, l in labels.items() if nodes[n]["kind"] == "resource"},
-                            ax=ax, font_size=8.0, font_weight="bold")
+                            ax=ax, font_size=13, font_weight="bold")
 
     pos_values = np.array(list(pos.values()))
     ax.set_xlim(pos_values[:, 0].min() - 0.45, pos_values[:, 0].max() + 0.45)
@@ -278,10 +279,10 @@ def draw_scenario(ax, fname, idx):
     else:
         subtitle = "Expected: Collapsed   |   Reasoned: Collapsed"
 
-    # --- AJUSTE AQUÍ: pad=18 para acercar el título general y y=1.012 para el subtítulo ---
-    ax.set_title(f"Scenario {idx + 1}", fontsize=15, pad=18, fontweight="bold")
+    # ----- Aumento de tamaño en títulos y subtítulos -----
+    ax.set_title(f"Scenario {idx + 1}", fontsize=18, pad=20, fontweight="bold")
     ax.text(0.5, 1.012, subtitle, transform=ax.transAxes, ha="center", va="bottom",
-            fontsize=9.5, style="italic", color="#333333")
+            fontsize=12, color="#1B1B1B", fontweight="bold")
             
     for spine in ax.spines.values():
         spine.set_edgecolor("black")
@@ -328,9 +329,10 @@ def visualize_all_graphs_paper_ready():
                        label="assignedTo"),
     ]
     
+    # ----- Aumento de tamaño en la fuente de la leyenda (fontsize=14) -----
     legend = legend_ax.legend(handles=legend_handles, loc="center", ncol=1,
                               frameon=True, edgecolor="#333333", borderpad=1.5,
-                              labelspacing=0.8, fontsize=12, handlelength=2.5)
+                              labelspacing=0.8, fontsize=14, handlelength=2.5)
                               
     header_labels = {"Domain Things:", "Resource Things:", "Relations:"}
     for text in legend.get_texts():
