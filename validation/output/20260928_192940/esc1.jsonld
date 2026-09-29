@@ -1,0 +1,437 @@
+[
+  {
+    "@id": "urn:test:GateA1",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.2004075Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "GateA1"
+      }
+    ],
+    "http://example.org/occupied.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2718057Z"
+      }
+    ],
+    "http://example.org/occupied.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+        "@value": false
+      }
+    ],
+    "http://example.org/otv2:assignedTo": [
+      {
+        "@id": "urn:test:Plane1"
+      }
+    ],
+    "http://example.org/otv2:hasTelemetry": [
+      {
+        "@id": "urn:test:airport-telemetry"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:Airport1",
+    "http://example.org/collapsed.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2692065Z"
+      }
+    ],
+    "http://example.org/collapsed.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+        "@value": false
+      }
+    ],
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.3612754Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Airport"
+      }
+    ],
+    "http://example.org/otv2:hasChild": [
+      {
+        "@id": "urn:test:TerminalA"
+      },
+      {
+        "@id": "urn:test:TerminalB"
+      }
+    ],
+    "http://example.org/otv2:hasMLModel": [
+      {
+        "@id": "urn:test:airport-ml-predictor"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:Plane4",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.4751468Z"
+      }
+    ],
+    "http://example.org/flying.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2734653Z"
+      }
+    ],
+    "http://example.org/flying.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 43
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Plane4"
+      }
+    ],
+    "http://example.org/otv2:hasFMISimulation": [
+      {
+        "@id": "urn:test:airport-fmi-fuel"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:GateA2",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.2264451Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "GateA2"
+      }
+    ],
+    "http://example.org/occupied.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2718364Z"
+      }
+    ],
+    "http://example.org/occupied.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+        "@value": false
+      }
+    ],
+    "http://example.org/otv2:hasTelemetry": [
+      {
+        "@id": "urn:test:airport-telemetry"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:Plane3",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.4428286Z"
+      }
+    ],
+    "http://example.org/flying.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2716703Z"
+      }
+    ],
+    "http://example.org/flying.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 28
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Plane3"
+      }
+    ],
+    "http://example.org/otv2:hasFMISimulation": [
+      {
+        "@id": "urn:test:airport-fmi-fuel"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:airport-ml-predictor",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.1544284Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "ML Flight Delay Predictor"
+      }
+    ],
+    "http://example.org/otv2:hasMLModel": [
+      {
+        "@id": "urn:test:Airport1"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:Plane2",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.4160236Z"
+      }
+    ],
+    "http://example.org/flying.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2717283Z"
+      }
+    ],
+    "http://example.org/flying.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 20
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Plane2"
+      }
+    ],
+    "http://example.org/otv2:hasFMISimulation": [
+      {
+        "@id": "urn:test:airport-fmi-fuel"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:TerminalB",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.3330681Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "TerminalB"
+      }
+    ],
+    "http://example.org/otv2:hasChild": [
+      {
+        "@id": "urn:test:GateB1"
+      },
+      {
+        "@id": "urn:test:GateB2"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:GateB1",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.2616642Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "GateB1"
+      }
+    ],
+    "http://example.org/occupied.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.273536Z"
+      }
+    ],
+    "http://example.org/occupied.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+        "@value": false
+      }
+    ],
+    "http://example.org/otv2:hasTelemetry": [
+      {
+        "@id": "urn:test:airport-telemetry"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:Plane5",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.500554Z"
+      }
+    ],
+    "http://example.org/flying.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2737072Z"
+      }
+    ],
+    "http://example.org/flying.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 58
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Plane5"
+      }
+    ],
+    "http://example.org/otv2:assignedTo": [
+      {
+        "@id": "urn:test:GateB2"
+      }
+    ],
+    "http://example.org/otv2:hasFMISimulation": [
+      {
+        "@id": "urn:test:airport-fmi-fuel"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:GateB2",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.2839267Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "GateB2"
+      }
+    ],
+    "http://example.org/occupied.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2738055Z"
+      }
+    ],
+    "http://example.org/occupied.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#boolean",
+        "@value": false
+      }
+    ],
+    "http://example.org/otv2:assignedTo": [
+      {
+        "@id": "urn:test:Plane5"
+      }
+    ],
+    "http://example.org/otv2:hasTelemetry": [
+      {
+        "@id": "urn:test:airport-telemetry"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:airport-fmi-fuel",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.1314055Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "FMI Aircraft Simulator"
+      }
+    ],
+    "http://example.org/otv2:hasFMISimulation": [
+      {
+        "@id": "urn:test:Plane1"
+      },
+      {
+        "@id": "urn:test:Plane2"
+      },
+      {
+        "@id": "urn:test:Plane3"
+      },
+      {
+        "@id": "urn:test:Plane4"
+      },
+      {
+        "@id": "urn:test:Plane5"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:TerminalA",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.309097Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "TerminalA"
+      }
+    ],
+    "http://example.org/otv2:hasChild": [
+      {
+        "@id": "urn:test:GateA1"
+      },
+      {
+        "@id": "urn:test:GateA2"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:airport-telemetry",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.1752096Z"
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Airport Physical Telemetry"
+      }
+    ],
+    "http://example.org/otv2:hasTelemetry": [
+      {
+        "@id": "urn:test:GateA1"
+      },
+      {
+        "@id": "urn:test:GateA2"
+      },
+      {
+        "@id": "urn:test:GateB1"
+      },
+      {
+        "@id": "urn:test:GateB2"
+      }
+    ]
+  },
+  {
+    "@id": "urn:test:Plane1",
+    "http://example.org/createdAt": [
+      {
+        "@value": "2026-09-28T17:29:41.3883877Z"
+      }
+    ],
+    "http://example.org/flying.lastUpdate": [
+      {
+        "@value": "2026-09-28T17:30:37.2714925Z"
+      }
+    ],
+    "http://example.org/flying.value": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#integer",
+        "@value": 13
+      }
+    ],
+    "http://example.org/name": [
+      {
+        "@value": "Plane1"
+      }
+    ],
+    "http://example.org/otv2:assignedTo": [
+      {
+        "@id": "urn:test:GateA1"
+      }
+    ],
+    "http://example.org/otv2:hasFMISimulation": [
+      {
+        "@id": "urn:test:airport-fmi-fuel"
+      }
+    ]
+  }
+]

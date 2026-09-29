@@ -218,7 +218,7 @@ This method is ideal for development and testing.
         cd opentwinsv2-services/src/Things/
         
         # Run the service
-        dapr run --app-id things-service --app-port 5001 --resources-path ./Infrastructure/DaprComponentsLocal -- dotnet run --urls=http://localhost:5001/
+        dapr run --app-id things-service --app-port 5002 --resources-path ./Infrastructure/DaprComponentsLocal -- dotnet run --urls=http://localhost:5002/
         ```
     * **Terminal 3 (Twins Service):**
         ```bash

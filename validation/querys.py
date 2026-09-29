@@ -1,4 +1,5 @@
 from rdflib import Graph
+from time import perf_counter
 
 def verify_isolated_scenario(g: Graph, expected_scenario: str):
     """
@@ -64,8 +65,17 @@ def verify_isolated_scenario(g: Graph, expected_scenario: str):
 
     # Execute all queries and store results
     results = {}
+    query_times_ms = {}
+    
+    print("\n[INFO] Executing individual SPARQL queries...")
     for scenario_name, query_str in queries.items():
+        t_start = perf_counter()
         results[scenario_name] = bool(list(g.query(query_str))[0])
+        t_end = perf_counter()
+        
+        exec_time = (t_end - t_start) * 1000
+        query_times_ms[scenario_name] = exec_time
+        print(f"       -> '{scenario_name}' query took: {exec_time:.2f} ms")
         
     # Print the Header
     print("======================================================")
@@ -116,4 +126,4 @@ def verify_isolated_scenario(g: Graph, expected_scenario: str):
         
     print("======================================================\n")
     
-    return all_tests_passed
+    return all_tests_passed, query_times_ms, results

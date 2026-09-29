@@ -1,4 +1,4 @@
-// Execute with: dapr run --app-id events-service --app-port 5012 --resources-path ./Infrastructure/DaprComponentsLocal --config ./daprConfig.yaml -- dotnet run --urls=http://localhost:5012/
+// Execute with: dapr run --app-id events-service --app-port 5012 --resources-path ./Infrastructure/DaprComponentsLocal -- dotnet run --urls=http://localhost:5012/
 
 using Dapr.Messaging.PublishSubscribe.Extensions;
 using Events.Handlers;

@@ -16,14 +16,14 @@ def removeAndInitDB():
     resp = requests.delete(TWINS_ENDPOINT + "/graphdb/all")
     try:
         resp.raise_for_status()
-        #print("[INFO] Successfully deleted all db:", resp.json())
+        print("[INFO] Database cleared successfully. Response:", resp.json())
     except requests.HTTPError as e:
         print("[ERROR] Request failed:", e, resp.text)
         
     resp = requests.put(TWINS_ENDPOINT + "/graphdb/init")
     try:
         resp.raise_for_status()
-        #print("[INFO] Successfully init schema:", resp.json())
+        print("[INFO] Database schema initialized successfully. Response:", resp.json())
     except requests.HTTPError as e:
         print("[ERROR] Request failed:", e, resp.text)
     return resp
@@ -32,7 +32,7 @@ def send_put(url, headers=None, json=None):
     resp = requests.put(url, headers=headers, json=json)
     try:
         resp.raise_for_status()
-        #print("[INFO] Successfully sent")
+        #print(f"[INFO] PUT request to {url} completed successfully.")
     except requests.HTTPError as e:
         print("[ERROR] Request failed:", e, resp.text)
         
@@ -50,6 +50,7 @@ def send_post(url, headers=None, json=None):
 
 
 def add_thing_to_twin(thingId):
+    print(f"[INFO] Linking Thing(s) '{thingId}' to Digital Twin '{TWIN_ID}'...")
     send_put(f"{TWINS_ENDPOINT}/twins/{TWIN_ID}/things/{thingId}")
 
 def prepare_thing_data(json_filename, add_id=""):
@@ -57,6 +58,7 @@ def prepare_thing_data(json_filename, add_id=""):
     Lee y prepara el JSON del TD aplicando los sufijos necesarios, 
     pero NO hace la petición HTTP. Retorna el objeto dict.
     """
+    print(f"[INFO] Parsing Thing Description from file: '{json_filename}' (Suffix applied: '{add_id}')")
     json_path = Path(json_filename)
     if not json_path.exists():
         raise FileNotFoundError(f"File not found: {json_filename}")
@@ -82,6 +84,7 @@ def prepare_thing_data(json_filename, add_id=""):
 
 def post_thing(json_filename, add_id=""):
     data = prepare_thing_data(json_filename, add_id)
+    print(f"[INFO] Attempting to register Thing with expected ID: '{data['id']}'...")
 
     url = f"{THINGS_ENDPOINT}/things"
     headers = {"Content-Type": "application/json"}
@@ -106,7 +109,7 @@ def setPlane(thingId, targetId):
     resp = requests.post(f"{THINGS_ENDPOINT}/things/{thingId}/links", json=data)
     try:
         resp.raise_for_status()
-        #print("[INFO] Successfully sent")
+        print(f"[INFO] Entity '{thingId}' successfully assigned to target '{targetId}'.")
     except requests.HTTPError as e:
         print("[ERROR] Request failed:", e, resp.text)
         
@@ -117,14 +120,15 @@ def removePlane(thingId, targetId):
     resp = requests.delete(f"{THINGS_ENDPOINT}/things/{thingId}/links/otv2:assignedTo/{targetId}")
     try:
         resp.raise_for_status()
-        #print("[INFO] Successfully sent")
+        print(f"[INFO] Link between entity '{thingId}' and target '{targetId}' successfully removed.")
     except requests.HTTPError as e:
         print("[ERROR] Request failed:", e, resp.text)
         
     return resp
 
 def prepare_base():
-    
+
+    print("[INFO] Bootstrapping base infrastructure: Initializing database and registering base entities.")
     removeAndInitDB()
     
     listId = []
@@ -143,6 +147,7 @@ def prepare_base():
         listId.append(post_thing("thingDescriptions/domain-plane.json", str(i)))
         
     # Create twin
+    print(f"[INFO] Provisioning Digital Twin with ID: '{TWIN_ID}'...")
     send_post(f"{TWINS_ENDPOINT}/twins/{TWIN_ID}")
     add_thing_to_twin(",".join(listId))
     #print(listId)

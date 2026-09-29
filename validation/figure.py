@@ -291,11 +291,11 @@ def draw_scenario(ax, fname, idx):
     ax.set_yticks([])
 
 
-def visualize_all_graphs_paper_ready():
+def visualize_all_graphs_paper_ready(output_dir):
     fig, axes = plt.subplots(3, 2, figsize=(14, 18), facecolor="white")
     axes_flat = axes.flatten()
     
-    filenames = [f"output/esc{i}.ttl" for i in range(1, 6)]
+    filenames = [os.path.join(output_dir, f"esc{i}.ttl") for i in range(1, 6)]
 
     for i, fname in enumerate(filenames):
         draw_scenario(axes_flat[i], fname, i)
@@ -344,8 +344,9 @@ def visualize_all_graphs_paper_ready():
     plt.rcParams["font.family"] = "sans-serif"
     
     plt.subplots_adjust(wspace=0.05, hspace=0.15)
-    
-    plt.savefig("output/graphs_paper.pdf", dpi=600,
+
+    save_path = os.path.join(output_dir, "graphs_paper.pdf")
+    plt.savefig(save_path, dpi=600,
                 bbox_inches="tight", facecolor="white")
     print("[INFO] Image 'graphs_paper.pdf' successfully generated.")
 
@@ -353,4 +354,4 @@ def visualize_all_graphs_paper_ready():
 if __name__ == "__main__":
     if not os.path.exists("output"):
         os.makedirs("output")
-    visualize_all_graphs_paper_ready()
+    visualize_all_graphs_paper_ready("old")
