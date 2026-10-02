@@ -174,7 +174,7 @@ def build_layout(nodes, hierarchy_edges, resource_edges):
         plane_width = max(x_max - x_min, 0.4)
         spacing = plane_width / max(n_planes - 1, 1) if n_planes > 1 else 0
         start_x = (x_min + x_max) / 2 - (plane_width / 2 if n_planes > 1 else 0)
-        plane_y = (min(p[1] for p in pos.values()) if pos else 0) - 0.70
+        plane_y = (min(p[1] for p in pos.values()) if pos else 0) - 1.2
         for idx, pid in enumerate(plane_ids):
             px = start_x + idx * spacing if n_planes > 1 else (x_min + x_max) / 2
             pos[pid] = (px, plane_y)
@@ -251,7 +251,7 @@ def draw_scenario(ax, fname, idx):
                            edgecolors="#444444", linewidths=1.5)
 
     nx.draw_networkx_edges(G_draw, pos, ax=ax, edgelist=hierarchy_edges,
-                           arrows=True, arrowstyle="->", width=1.5,
+                           arrows=True, arrowstyle="->", width=3.0, arrowsize=15, node_size=2200,
                            alpha=0.8, edge_color="#333333")
 
     nx.draw_networkx_edges(G_draw, pos, ax=ax, edgelist=res_edge_list,
@@ -259,10 +259,30 @@ def draw_scenario(ax, fname, idx):
                            alpha=0.4, edge_color="#8866AA", style="solid",
                            connectionstyle="arc3,rad=0.08")
                            
-    nx.draw_networkx_edges(G_draw, pos, ax=ax, edgelist=assigned_edges,
-                           arrows=True, arrowstyle="-|>", width=2.0,
-                           alpha=1.0, edge_color="#FF5500", style="solid",
-                           connectionstyle="arc3,rad=-0.15")
+    unidirectional_assigned = []
+    bidirectional_assigned = set()
+
+    for u, v in assigned_edges:
+        if (v, u) in assigned_edges:
+            # Si existe la inversa, la guardamos ordenada para que solo se guarde 1 vez
+            bidirectional_assigned.add(tuple(sorted((u, v))))
+        else:
+            unidirectional_assigned.append((u, v))
+
+    bidirectional_assigned = list(bidirectional_assigned)
+
+    # 1. Dibujar las unidireccionales (normales)
+    if unidirectional_assigned:
+        nx.draw_networkx_edges(G_draw, pos, ax=ax, edgelist=unidirectional_assigned,
+                               arrows=True, arrowstyle="-|>", width=4.0, arrowsize=15, node_size=2200,
+                               alpha=1.0, edge_color="#FF5500", style="solid",
+                               connectionstyle="arc3,rad=-0.15")
+
+    # 2. Dibujar las bidireccionales (1 sola línea, mucho más gorda, doble flecha)
+    if bidirectional_assigned:
+        nx.draw_networkx_edges(G_draw, pos, ax=ax, edgelist=bidirectional_assigned,
+                               arrows=True, arrowstyle="<|-|>", width=4.0, arrowsize=15, node_size=2200,  # Mucho más gruesa
+                               alpha=1.0, edge_color="#FF5500", style="solid") # Misma curvatura pero unificada
 
     # ----- Aumento de tamaño de fuente en las etiquetas de los nodos -----
     nx.draw_networkx_labels(G_draw, pos, labels={n: l for n, l in labels.items() if nodes[n]["kind"] == "domain"},
@@ -280,9 +300,9 @@ def draw_scenario(ax, fname, idx):
         subtitle = "Expected: Collapsed   |   Reasoned: Collapsed"
 
     # ----- Aumento de tamaño en títulos y subtítulos -----
-    ax.set_title(f"Scenario {idx + 1}", fontsize=18, pad=20, fontweight="bold")
+    ax.set_title(f"Scenario {idx + 1}", fontsize=20, pad=20, fontweight="bold")
     ax.text(0.5, 1.012, subtitle, transform=ax.transAxes, ha="center", va="bottom",
-            fontsize=12, color="#1B1B1B", fontweight="bold")
+            fontsize=14, color="#1B1B1B", fontweight="bold")
             
     for spine in ax.spines.values():
         spine.set_edgecolor("black")
@@ -292,58 +312,61 @@ def draw_scenario(ax, fname, idx):
 
 
 def visualize_all_graphs_paper_ready(output_dir):
-    fig, axes = plt.subplots(3, 2, figsize=(14, 18), facecolor="white")
-    axes_flat = axes.flatten()
+    fig, axes = plt.subplots(5, 1, figsize=(9, 24), facecolor="white")
     
     filenames = [os.path.join(output_dir, f"esc{i}.ttl") for i in range(1, 6)]
 
     for i, fname in enumerate(filenames):
-        draw_scenario(axes_flat[i], fname, i)
-
-    legend_ax = axes_flat[5]
-    legend_ax.axis("off")
+        draw_scenario(axes[i], fname, i)
 
     blank = mlines.Line2D([], [], color="none", label=" ")
 
-    legend_handles = [
+    # Intercalamos los elementos (Columna 1, Columna 2) para forzar el layout en ncol=2
+    handles_domain = [
         mlines.Line2D([], [], color="none", label="Domain Things:"),
         mpatches.Patch(facecolor="#D06D6D", edgecolor="#666666", label="Airport"),
         mpatches.Patch(facecolor="#B7D8A9", edgecolor="#666666", label="Terminal"),
         mpatches.Patch(facecolor="#F2C97D", edgecolor="#666666", label="Gate"),
         mpatches.Patch(facecolor="#7DA3C8", edgecolor="#666666", label="Plane"),
-        
-        blank,
-        
+    ]
+
+    # 2. Lista para la columna derecha (Resources y Relations)
+    handles_resources_relations = [
         mlines.Line2D([], [], color="none", label="Resource Things:"),
         mlines.Line2D([], [], marker="s", linestyle="None", markersize=14,
-                       markerfacecolor="#C9B8E8", markeredgecolor="#444444",
-                       label="Telemetry/FMI/ML"),
-                       
+                      markerfacecolor="#C9B8E8", markeredgecolor="#444444", label="Telemetry/FMI/ML"),
+
         blank,
         
         mlines.Line2D([], [], color="none", label="Relations:"),
         mlines.Line2D([], [], color="#333333", linewidth=1.5, label="hasChild"),
-        mlines.Line2D([], [], color="#8866AA", linewidth=1.4, linestyle="solid", alpha=0.4,
-                       label="resource"),
-        mlines.Line2D([], [], color="#FF5500", linewidth=2.0, linestyle="solid",
-                       label="assignedTo"),
+        mlines.Line2D([], [], color="#8866AA", linewidth=1.4, linestyle="solid", alpha=0.4, label="resource"),
+        mlines.Line2D([], [], color="#FF5500", linewidth=2.0, linestyle="solid", label="assignedTo"),
     ]
+
+    # 3. Leyenda izquierda SIN BORDE (frameon=False)
+    leg1 = axes[4].legend(handles=handles_domain, loc="upper right", bbox_to_anchor=(0.50, -0.05),
+                          frameon=False, labelspacing=0.4, fontsize=15, handlelength=2.0)
     
-    # ----- Aumento de tamaño en la fuente de la leyenda (fontsize=14) -----
-    legend = legend_ax.legend(handles=legend_handles, loc="center", ncol=1,
-                              frameon=True, edgecolor="#333333", borderpad=1.5,
-                              labelspacing=0.8, fontsize=14, handlelength=2.5)
-                              
+    axes[4].add_artist(leg1)
+
+    # 4. Leyenda derecha SIN BORDE (frameon=False)
+    leg2 = axes[4].legend(handles=handles_resources_relations, loc="upper left", bbox_to_anchor=(0.50, -0.05),
+                          frameon=False, labelspacing=0.4, fontsize=15, handlelength=2.0)
+
+    # 5. Aplicar la negrita a los títulos en ambas leyendas
     header_labels = {"Domain Things:", "Resource Things:", "Relations:"}
-    for text in legend.get_texts():
-        if text.get_text() in header_labels:
-            text.set_fontweight("bold")
+    for leg in [leg1, leg2]:
+        for text in leg.get_texts():
+            if text.get_text() in header_labels:
+                text.set_fontweight("bold")
 
     plt.tight_layout()
     plt.rcParams["text.usetex"] = False
     plt.rcParams["font.family"] = "sans-serif"
     
-    plt.subplots_adjust(wspace=0.05, hspace=0.15)
+    # hspace separa los escenarios entre sí, bottom deja hueco abajo para la leyenda
+    plt.subplots_adjust(hspace=0.25, bottom=0.15)
 
     save_path = os.path.join(output_dir, "graphs_paper.pdf")
     plt.savefig(save_path, dpi=600,

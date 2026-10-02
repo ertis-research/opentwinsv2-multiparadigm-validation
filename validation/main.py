@@ -246,6 +246,7 @@ def main():
     try:
         execute_test()
         # Figure module generates the visuals from the /output directory
+        # OUTPUT_DIR = os.path.join("output", "20260928_193620")
         figure.visualize_all_graphs_paper_ready(OUTPUT_DIR)
         quantitative.plot_granular_sparql_metrics(OUTPUT_DIR)
         quantitative.plot_api_fetch_metrics(OUTPUT_DIR)

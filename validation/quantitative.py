@@ -23,12 +23,32 @@ def plot_api_fetch_metrics(output_dir):
     fig, ax = plt.subplots(figsize=(8, 5))
     
     # Plot API Fetch Time
-    ax.bar(x_labels, df["API_Fetch_Time_ms"], color='steelblue', edgecolor='black', alpha=0.85)
+    # Déjalo así:
+    ax.bar(x_labels, df["API_Fetch_Time_ms"], color='#4C72B0', edgecolor='black', alpha=0.85)
     
     # Custom title in English as requested
-    ax.set_title("Knowledge Graph Retrieval Performance", fontsize=14, fontweight='bold')
-    ax.set_ylabel("Average Latency (ms)", fontsize=12)
+    ax.set_title("Knowledge Graph Retrieval Performance", fontsize=18, fontweight='bold')
+    ax.set_ylabel("Average Latency (ms)", fontsize=14, fontweight='bold')
+    plt.xticks(fontsize=12, fontweight='bold')
+    plt.yticks(fontsize=12, fontweight='bold')
+    
     ax.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # --- AÑADIR A plot_api_fetch_metrics ---
+    ax2 = ax.twinx()
+    ax2.plot(x_labels, df["Graph_Triples_Count"], color='#1F1F1F', marker='o', 
+             linestyle='-', linewidth=2.5, markersize=8)
+    ax2.set_ylabel("Average Graph Size (Triples)", fontsize=14, fontweight='bold')
+
+    ax2.tick_params(axis='y', labelsize=12)
+    for label in ax2.get_yticklabels():
+        label.set_fontweight('bold')
+
+    # Ajustar límites (15% de espacio extra arriba en lugar de 40%)
+    max_latency = df["API_Fetch_Time_ms"].max()
+    ax.set_ylim(0, max_latency * 1.15)
+    max_triples = df["Graph_Triples_Count"].max()
+    ax2.set_ylim(0, max_triples * 1.15)
 
     plt.tight_layout()
     
@@ -67,7 +87,7 @@ def plot_granular_sparql_metrics(output_dir):
     fig, ax = plt.subplots(figsize=(10, 6))
     
     bottom_offsets = [0] * len(df)
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'] # Default palette
+    colors = ['#4C72B0', '#DD8452', '#55A868', '#C44E52', '#8172B3'] # Default palette
     
     # Plot a stacked bar for each query type
     for idx, col in enumerate(sparql_cols):
@@ -80,30 +100,21 @@ def plot_granular_sparql_metrics(output_dir):
         # Add the current bar's height to the bottom_offsets for the next layer
         bottom_offsets = [b + val for b, val in zip(bottom_offsets, df[col])]
 
-    ax.set_title("SPARQL Performance per Query", fontsize=14, fontweight='bold')
-    ax.set_ylabel("Average Latency (ms)", fontsize=12)
+    ax.set_title("SPARQL Performance per Query", fontsize=18, fontweight='bold')
+    ax.set_ylabel("Average Latency (ms)", fontsize=14, fontweight='bold')
     ax.grid(axis='y', linestyle='--', alpha=0.7)
 
-    # --- NEW: Secondary axis for Graph Size ---
-    ax2 = ax.twinx()
-    # Plotting line with markers for the graph size
-    ax2.plot(x_labels, df["Graph_Triples_Count"], color='black', marker='o', 
-             linestyle='-', linewidth=2, markersize=7, label='Graph Size (Triples)')
-    ax2.set_ylabel("Average Graph Size (Triples)", fontsize=12)
+    ax.tick_params(axis='both', labelsize=12)
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontweight('bold')
+
 
     # --- Adjust limits to prevent data overlapping with the legend ---
     max_latency = max(bottom_offsets) if bottom_offsets else 1
-    ax.set_ylim(0, max_latency * 1.35)  # 35% extra space on top for latency
-    
-    max_triples = df["Graph_Triples_Count"].max()
-    ax2.set_ylim(0, max_triples * 1.35) # 35% extra space on top for triples
-
-    # --- Combine legends from both axes ---
-    handles1, labels1 = ax.get_legend_handles_labels()
-    handles2, labels2 = ax2.get_legend_handles_labels()
+    ax.set_ylim(0, max_latency * 1.4)  # 35% extra space on top for latency
     
     # Place combined legend in the upper right
-    ax.legend(handles1 + handles2, labels1 + labels2, loc='upper right', framealpha=0.95)
+    ax.legend(loc='upper right', framealpha=0.95, prop={'size': 12, 'weight': 'bold'})
 
     plt.tight_layout()
     
